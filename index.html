@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dharansh Neema - Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/5543827f75.js" crossorigin="anonymous"></script>
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #38bdf8; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #0ea5e9; }
+        html { scroll-behavior: smooth; }
+        body { background-color: #000000; color: #e5e5e5; }
+
+        /* Entry animations */
+        @keyframes fadeInUpSlight {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeInUpSlight { animation: fadeInUpSlight 0.8s ease-out forwards; }
+        .delay-100 { animation-delay: 0.1s; } .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; } .delay-400 { animation-delay: 0.4s; }
+        .delay-500 { animation-delay: 0.5s; } .delay-600 { animation-delay: 0.6s; }
+        .delay-700 { animation-delay: 0.7s; } .delay-800 { animation-delay: 0.8s; }
+        .delay-900 { animation-delay: 0.9s; } .delay-1000 { animation-delay: 1s; }
+
+        /* Scroll-triggered animations */
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+            will-change: opacity, transform;
+        }
+        .revealed { opacity: 1; transform: translateY(0); }
+
+        /* Section Backgrounds & Gradients */
+        @keyframes gradientBackgroundAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        #timeline, #projects, #expertise, #contact {
+            position: relative;
+            overflow: hidden; 
+        }
+
+        #timeline {
+            background-color: #0d1117; 
+            background: linear-gradient(300deg, #000428, #000000, #0c0c1d, #000000);
+            background-size: 250% 250%;
+            animation: gradientBackgroundAnimation 25s ease infinite;
+        }
+        #timeline::before {
+            content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.03) 1px, transparent 0);
+            background-size: 20px 20px; opacity: 0.5; z-index: 0;
+        }
+        #about, #timeline > .container, #projects > .container, #expertise > .container, #contact > .container { 
+            position: relative; 
+            z-index: 1; 
+        }
+        /* Added #about to the z-index rule for consistency */
+
+
+        .timeline-container::before {
+            content: ''; position: absolute; left: 50%; transform: translateX(-50%);
+            top: 0; bottom: 0; width: 3px; background-color: #2c3e50;
+            border-radius: 2px; z-index: 1;
+        }
+        .timeline-container.revealed::before { animation: drawLine 1s ease-out forwards; height: 100%; }
+        @keyframes drawLine { from { height: 0%; } to { height: 100%; } }
+
+        .timeline-item { position: relative; margin-bottom: 50px; width: 100%; z-index: 2; }
+        .timeline-item:last-child { margin-bottom: 0; }
+        .timeline-content {
+            position: relative; width: calc(50% - 45px);
+            background-color: rgba(17, 24, 39, 0.85); backdrop-filter: blur(5px);
+            padding: 20px 25px; border-radius: 10px;
+            border: 1px solid rgba(56, 189, 248, 0.15);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease-out;
+        }
+        .timeline-content:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 10px 30px rgba(56, 189, 248, 0.35);
+        }
+        .timeline-item:nth-child(odd) .timeline-content { left: 0; margin-left: calc(50% + 45px); text-align: left; }
+        .timeline-item:nth-child(even) .timeline-content { left: 0; margin-right: calc(50% + 45px); text-align: right; }
+        .timeline-dot {
+            content: ''; position: absolute; left: 50%; top: 20px;
+            transform: translateX(-50%); width: 18px; height: 18px;
+            border-radius: 50%; background-color: #0ea5e9;
+            border: 3px solid #000000; z-index: 3;
+            transition: transform 0.3s ease-out, background-color 0.3s ease-out;
+        }
+        .timeline-item:hover .timeline-dot { transform: translateX(-50%) scale(1.25); background-color: #38bdf8; }
+
+        #projects {
+            background-color: #080808; 
+            background: linear-gradient(120deg, #000000, #0a001f, #000000, #1f0010);
+            background-size: 200% 200%;
+            animation: gradientBackgroundAnimation 30s ease infinite alternate;
+        }
+         #projects::before { 
+            content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background-image: linear-gradient(45deg, rgba(255,255,255,0.01) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.01) 75%),
+                              linear-gradient(45deg, rgba(255,255,255,0.01) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.01) 75%);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
+            opacity: 0.3; z-index: 0;
+        }
+
+        .project-card {
+            background-color: rgba(23, 30, 46, 0.7); 
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out, border-color 0.3s ease-out;
+        }
+        .project-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 12px 35px rgba(56, 189, 248, 0.25);
+            border-color: rgba(56, 189, 248, 0.5);
+        }
+        .project-icon-container {
+            background-color: rgba(56, 189, 248, 0.1);
+            transition: background-color 0.3s ease-out;
+        }
+        .project-card:hover .project-icon-container {
+            background-color: rgba(56, 189, 248, 0.2);
+        }
+
+        /* Expertise Section Styles */
+        #expertise {
+            background-color: #050505;
+            background: linear-gradient(240deg, #000000, #1a001a, #000000, #001a1a);
+            background-size: 220% 220%;
+            animation: gradientBackgroundAnimation 28s ease infinite alternate-reverse;
+        }
+        #expertise::before {
+            content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                radial-gradient(rgba(128, 0, 128, 0.05) 1px, transparent 1px),
+                radial-gradient(rgba(0, 128, 128, 0.05) 1px, transparent 1px);
+            background-size: 25px 25px, 25px 25px;
+            background-position: 0 0, 12.5px 12.5px;
+            opacity: 0.4; z-index: 0;
+        }
+        .skill-category-row {
+            background-color: rgba(10, 10, 20, 0.75); 
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(167, 139, 250, 0.2);
+            transition: box-shadow 0.3s ease-out;
+        }
+        .skill-category-row:hover {
+            box-shadow: 0 8px 25px rgba(167, 139, 250, 0.15);
+        }
+        .skill-item {
+            background-color: rgba(255, 255, 255, 0.03); 
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex; 
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 120px; 
+        }
+        .skill-item:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+            transform: translateY(-4px) scale(1.03); 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .skill-item i { /* Font Awesome icon styling */
+            font-size: 2.5rem; 
+            margin-bottom: 0.75rem; 
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+        @media (min-width: 640px) { /* sm breakpoint */
+             .skill-item i {
+                font-size: 3rem; 
+            }
+        }
+        .skill-item:hover i {
+            transform: scale(1.15);
+        }
+        /* Individual icon colors */
+        .fa-python { color: #FFD43B; } 
+        .fa-java { color: #ED8B00; } 
+        .fa-js-square { color: #F7DF1E; } 
+        .fa-node-js { color: #3C873A; } 
+        .fa-html5 { color: #E34F26; } 
+        .fa-git-alt { color: #F05032; } 
+        .fa-github { color: #E8EAEA; } 
+        .fa-docker { color: #2496ED; } 
+        .fa-jenkins { color: #D24939; } 
+        .fa-aws { color: #FF9900; } 
+        .fa-google { color: #4285F4; } 
+        .fa-code, .fa-server, .fa-link, .fa-project-diagram, .fa-cogs, .fa-database, .fa-leaf, .fa-dharmachakra, .fa-play-circle, .fa-brain, .fa-vector-square {
+            color: #9ca3af; 
+        }
+        .skill-item:hover .fa-code, .skill-item:hover .fa-server, .skill-item:hover .fa-link, .skill-item:hover .fa-project-diagram, .skill-item:hover .fa-cogs, .skill-item:hover .fa-database, .skill-item:hover .fa-leaf, .skill-item:hover .fa-dharmachakra, .skill-item:hover .fa-play-circle, .skill-item:hover .fa-brain, .skill-item:hover .fa-vector-square {
+            color: #a78bfa; 
+        }
+
+        /* Contact Section Styles */
+        #contact {
+            background-color: #030303;
+            background: linear-gradient(75deg, #000000, #11001f, #000000, #001f11);
+            background-size: 260% 260%;
+            animation: gradientBackgroundAnimation 32s ease infinite;
+        }
+        #contact::before {
+            content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                repeating-linear-gradient(45deg, rgba(255,255,255,0.01), rgba(255,255,255,0.01) 1px, transparent 1px, transparent 10px),
+                repeating-linear-gradient(-45deg, rgba(255,255,255,0.01), rgba(255,255,255,0.01) 1px, transparent 1px, transparent 10px);
+            opacity: 0.2; z-index: 0;
+        }
+        .contact-card {
+            background-color: rgba(15, 15, 25, 0.8); 
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(129, 140, 248, 0.25); 
+        }
+        .form-input, .form-textarea {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+        }
+        .form-input:focus, .form-textarea:focus {
+            background-color: rgba(255, 255, 255, 0.08);
+            border-color: #818cf8; 
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.3);
+        }
+
+        /* Interactive Avatar Style */
+        #interactive-avatar {
+            transition: transform 0.1s ease-out; /* Faster transition for responsiveness */
+            will-change: transform; /* Performance hint */
+        }
+
+
+        @media (max-width: 768px) {
+            .timeline-container::before { left: 15px; transform: translateX(0); }
+            .timeline-item:nth-child(odd) .timeline-content,
+            .timeline-item:nth-child(even) .timeline-content {
+                width: calc(100% - 50px); margin-left: 50px; margin-right: 0; left:0; text-align: left;
+            }
+            .timeline-dot { left: 15px; width: 16px; height: 16px; }
+            .contact-grid { grid-template-columns: 1fr; } 
+            .contact-avatar-container { margin-bottom: 2rem; }
+        }
+
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'brand-black': '#000000',
+                        'brand-near-black': '#0a0a0a',
+                        'brand-dark-gray': '#171717', 
+                        'brand-medium-gray': '#262626',
+                        'timeline-box-bg': 'rgba(17, 24, 39, 0.85)',
+                        'project-card-bg': 'rgba(23, 30, 46, 0.7)',
+                        'skill-card-bg': 'rgba(10, 10, 20, 0.75)',
+                        'contact-card-bg': 'rgba(15, 15, 25, 0.8)',
+                    },
+                    animation: {
+                        fadeInUpSlight: 'fadeInUpSlight 0.8s ease-out forwards',
+                        drawLine: 'drawLine 1s ease-out forwards',
+                        gradientBackgroundAnimation: 'gradientBackgroundAnimation 25s ease infinite',
+                    },
+                    keyframes: {
+                        fadeInUpSlight: {
+                            'from': { opacity: '0', transform: 'translateY(20px)' },
+                            'to': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        drawLine: { 'from': { height: '0%' }, 'to': { height: '100%' } },
+                        gradientBackgroundAnimation: {
+                            '0%': { backgroundPosition: '0% 50%' },
+                            '50%': { backgroundPosition: '100% 50%' },
+                            '100%': { backgroundPosition: '0% 50%' },
+                        }
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-brand-black text-neutral-200 font-inter antialiased">
+
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-black/70 backdrop-blur-lg shadow-2xl">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center">
+                    <a href="#" class="text-2xl sm:text-3xl font-bold text-neutral-100 hover:text-white transition-colors duration-300">
+                        Dharansh Neema </a>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-2">
+                        <a href="#about" class="text-neutral-400 hover:text-sky-400 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300">About</a>
+                        <a href="#timeline" class="text-neutral-400 hover:text-sky-400 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300">Timeline</a>
+                        <a href="#projects" class="text-neutral-400 hover:text-sky-400 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300">Projects</a>
+                        <a href="#expertise" class="text-neutral-400 hover:text-sky-400 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300">Skills</a>
+                        <a href="#contact" class="text-neutral-400 hover:text-sky-400 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300">Contact</a>
+                    </div>
+                </div>
+                <div class="-mr-2 flex md:hidden">
+                    <button type="button" id="mobile-menu-button" class="bg-neutral-800 inline-flex items-center justify-center p-2 rounded-md text-neutral-400 hover:text-white hover:bg-neutral-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-neutral-800 focus:ring-sky-500" aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
+                        <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="md:hidden hidden" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#about" class="text-neutral-300 hover:text-sky-400 hover:bg-neutral-800 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-300">About</a>
+                <a href="#timeline" class="text-neutral-300 hover:text-sky-400 hover:bg-neutral-800 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-300">Timeline</a>
+                <a href="#projects" class="text-neutral-300 hover:text-sky-400 hover:bg-neutral-800 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-300">Projects</a>
+                <a href="#expertise" class="text-neutral-300 hover:text-sky-400 hover:bg-neutral-800 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-300">Skills</a>
+                <a href="#contact" class="text-neutral-300 hover:text-sky-400 hover:bg-neutral-800 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-300">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <section id="about" class="min-h-screen flex items-center justify-center py-24 pt-32 sm:pt-28 bg-gradient-to-b from-brand-black via-neutral-900/30 to-brand-black overflow-hidden">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="mb-10 sm:mb-12 animate-fadeInUpSlight" style="perspective: 1000px;">
+                <img 
+                  id="interactive-avatar" 
+                  src="./images/avatar_dha2.png" 
+                  alt="My Avatar" 
+                  class="w-44 h-44 sm:w-52 sm:h-52 md:w-60 md:h-60 mx-auto rounded-full object-cover ring-2 ring-neutral-700 hover:ring-sky-400 ring-offset-4 ring-offset-black shadow-2xl transform hover:scale-105 transition-all duration-500 ease-in-out" 
+                  onerror="this.onerror=null; this.src='https://placehold.co/240x240/000000/38BDF8?text=Avatar';"/>
+            </div>
+            <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 animate-fadeInUpSlight delay-100">
+                Hello, I'm <span class="bg-gradient-to-r from-sky-400 via-cyan-300 to-indigo-400 bg-clip-text text-transparent">Dharansh Neema</span>.
+            </h1>
+            <p class="text-lg sm:text-xl md:text-2xl text-neutral-300 mb-8 max-w-3xl mx-auto leading-relaxed animate-fadeInUpSlight delay-200">
+                A passionate <strong class="font-semibold text-neutral-100">Full Stack AI Engineer</strong> with a knack for transforming complex challenges into elegant, high-impact digital solutions.
+            </p>
+            <p class="text-md sm:text-lg text-neutral-400 mb-10 sm:mb-12 max-w-2xl mx-auto leading-relaxed animate-fadeInUpSlight delay-300">
+                My expertise spans robust backend development using Node.js, Express.js, and Spring Boot, coupled with a deep proficiency in crafting intelligent systems with Generative AI (LangChain, LangGraph). I am adept at implementing MLOps best practices and leveraging Data Science to drive innovation and deliver scalable, user-centric applications.
+            </p>
+            <div class="animate-fadeInUpSlight delay-400">
+                <a href="#projects" class="inline-block bg-gradient-to-r from-sky-500 via-indigo-500 to-purple-600 hover:from-sky-400 hover:via-indigo-400 hover:to-purple-500 text-white font-semibold py-3.5 px-10 rounded-lg focus:outline-none focus:ring-4 focus:ring-sky-500/50 focus:ring-offset-2 focus:ring-offset-black transition-all duration-300 ease-in-out text-lg shadow-lg hover:shadow-xl transform hover:scale-105">
+                    View My Work
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="timeline" class="py-20 sm:py-28">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-center text-neutral-100 mb-16 sm:mb-20 reveal-on-scroll">
+                <span class="bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 bg-clip-text text-transparent">My Journey</span>
+            </h2>
+            <div class="relative timeline-container max-w-3xl mx-auto reveal-on-scroll">
+                <div class="timeline-item reveal-on-scroll"><div class="timeline-dot"></div><div class="timeline-content"><h3 class="text-xl sm:text-2xl font-semibold mb-1 bg-gradient-to-r from-sky-400 via-cyan-400 to-teal-400 bg-clip-text text-transparent">Full Stack AI Engineer</h3><p class="text-sm text-neutral-400 mb-2">Qualitas Technologies, Bangalore | May 2025 - Present</p><p class="text-neutral-300 text-sm sm:text-base leading-relaxed">Currently leveraging AI and full-stack development skills to build innovative solutions. Focusing on developing end-to-end AI powered applications and optimizing machine learning model deployment.</p></div></div>
+                <div class="timeline-item reveal-on-scroll delay-100"><div class="timeline-dot"></div><div class="timeline-content"><h3 class="text-xl sm:text-2xl font-semibold mb-1 bg-gradient-to-r from-sky-400 via-cyan-400 to-teal-400 bg-clip-text text-transparent">AI Engineer</h3><p class="text-sm text-neutral-400 mb-2">Zeeproc, Remote | Mar 2025 - Apr 2025</p><p class="text-neutral-300 text-sm sm:text-base leading-relaxed">Developed and implemented GenAI models and agents using LangChain and LangGraph. Integrated AI agents with backend systems via FastAPI, and analyzed large datasets to enhance AI model performance.</p></div></div>
+                <div class="timeline-item reveal-on-scroll delay-200"><div class="timeline-dot"></div><div class="timeline-content"><h3 class="text-xl sm:text-2xl font-semibold mb-1 bg-gradient-to-r from-sky-400 via-cyan-400 to-teal-400 bg-clip-text text-transparent">Exploring Generative AI</h3><p class="text-sm text-neutral-400 mb-2">Self-Learning | Early 2025</p><p class="text-neutral-300 text-sm sm:text-base leading-relaxed">Deep dived into Generative AI, mastering LangChain and LangGraph for building sophisticated AI applications and agentic workflows. Focused on practical implementation of LLMs.</p></div></div>
+                <div class="timeline-item reveal-on-scroll delay-300"><div class="timeline-dot"></div><div class="timeline-content"><h3 class="text-xl sm:text-2xl font-semibold mb-1 bg-gradient-to-r from-sky-400 via-cyan-400 to-teal-400 bg-clip-text text-transparent">ML/DL & MLOps Proficiency</h3><p class="text-sm text-neutral-400 mb-2">Self-Learning & Application | 2024</p><p class="text-neutral-300 text-sm sm:text-base leading-relaxed">Acquired comprehensive knowledge of Machine Learning and Deep Learning algorithms. Gained hands-on experience in MLOps, focusing on practical deployment of ML models.</p></div></div>
+                <div class="timeline-item reveal-on-scroll delay-400"><div class="timeline-dot"></div><div class="timeline-content"><h3 class="text-xl sm:text-2xl font-semibold mb-1 bg-gradient-to-r from-sky-400 via-cyan-400 to-teal-400 bg-clip-text text-transparent">Backend Developer Intern</h3><p class="text-sm text-neutral-400 mb-2">AulaCube, Gurugram | Sep 2023 - Dec 2023</p><p class="text-neutral-300 text-sm sm:text-base leading-relaxed">Led development of real-time tracking APIs (Firebase). Engineered RESTful APIs (Spring Boot, Maven) for user management, fee notifications, and reporting. Ensured scalability with Docker & Kubernetes.</p></div></div>
+                <div class="timeline-item reveal-on-scroll delay-500"><div class="timeline-dot"></div><div class="timeline-content"><h3 class="text-xl sm:text-2xl font-semibold mb-1 bg-gradient-to-r from-sky-400 via-cyan-400 to-teal-400 bg-clip-text text-transparent">Backend Development Foundations</h3><p class="text-sm text-neutral-400 mb-2">Self-Learning & Initial Projects | Early 2023</p><p class="text-neutral-300 text-sm sm:text-base leading-relaxed">Embarked on the backend development journey, specializing in Node.js and Express.js. Built foundational skills in API development, server-side logic, and database interactions.</p></div></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="py-20 sm:py-28">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-center text-neutral-100 mb-16 sm:mb-20 reveal-on-scroll">
+                <span class="bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 bg-clip-text text-transparent">My Projects</span>
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10">
+                <div class="project-card rounded-xl p-6 sm:p-8 flex flex-col reveal-on-scroll"><div class="flex-shrink-0 mb-5 flex items-center"><div class="project-icon-container p-3 rounded-lg mr-4"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7 text-sky-400"><path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375Z" /><path fill-rule="evenodd" d="M3.087 9l.54 9.176A3 3 0 0 0 6.62 21h10.757a3 3 0 0 0 2.995-2.824L20.913 9H3.087Zm16.639 0H4.275l.522 8.693a1.5 1.5 0 0 0 1.498 1.421h10.757a1.5 1.5 0 0 0 1.498-1.42L19.726 9Z" clip-rule="evenodd" /></svg></div><a href="https://github.com/Dharansh-Neema/Ideaflow-AI-diagram-generation" target="_blank" rel="noopener noreferrer" class="text-xl sm:text-2xl font-semibold bg-gradient-to-r from-sky-400 via-cyan-300 to-indigo-400 bg-clip-text text-transparent hover:opacity-80 transition-opacity">Ideaflow AI Diagram Generator</a></div><p class="text-neutral-400 text-sm sm:text-base leading-relaxed flex-grow mb-5">A modern web app using AI to auto-generate Mermaid diagrams from Notion pages. Input a Notion page title, and it extracts content, analyzes relationships, and creates structured diagrams.</p><a href="https://github.com/Dharansh-Neema/Ideaflow-AI-diagram-generation" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-sky-400 hover:text-sky-300 transition-colors text-sm font-medium group">View on GitHub<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 ml-1 transform group-hover:translate-x-0.5 transition-transform"><path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" /></svg></a></div>
+                <div class="project-card rounded-xl p-6 sm:p-8 flex flex-col reveal-on-scroll delay-100"><div class="flex-shrink-0 mb-5 flex items-center"><div class="project-icon-container p-3 rounded-lg mr-4"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7 text-sky-400"><path d="M18.75 3h-1.125a.75.75 0 0 0-.75.75V21h3V3.75A.75.75 0 0 0 18.75 3Z" /><path d="M12.75 12h-1.125a.75.75 0 0 0-.75.75V21h3V12.75a.75.75 0 0 0-.75-.75Z" /><path d="M6.75 15.75h-1.125a.75.75 0 0 0-.75.75V21h3V16.5a.75.75 0 0 0-.75-.75Z" /><path fill-rule="evenodd" d="M3 3.75A.75.75 0 0 1 3.75 3h16.5a.75.75 0 0 1 .75.75v16.5a.75.75 0 0 1-.75.75H3.75a.75.75 0 0 1-.75-.75V3.75ZM4.5 21V5.036C5.203 4.62 6.14 4.5 7.125 4.5H16.5c.953 0 1.848.112 2.537.324L19.5 4.5h-15Zm0 0h15V19.5h-15Z" clip-rule="evenodd" /></svg></div><a href="https://github.com/Dharansh-Neema/Stock-Sense" target="_blank" rel="noopener noreferrer" class="text-xl sm:text-2xl font-semibold bg-gradient-to-r from-sky-400 via-cyan-300 to-indigo-400 bg-clip-text text-transparent hover:opacity-80 transition-opacity">Stock Sense</a></div><p class="text-neutral-400 text-sm sm:text-base leading-relaxed flex-grow mb-5">An intelligent stock analysis platform providing real-time market insights, news analysis, and AI-driven recommendations. Combines technical analysis with NLP for comprehensive stock intelligence.</p><a href="https://github.com/Dharansh-Neema/Stock-Sense" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-sky-400 hover:text-sky-300 transition-colors text-sm font-medium group">View on GitHub<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 ml-1 transform group-hover:translate-x-0.5 transition-transform"><path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" /></svg></a></div>
+                <div class="project-card rounded-xl p-6 sm:p-8 flex flex-col reveal-on-scroll delay-200"><div class="flex-shrink-0 mb-5 flex items-center"><div class="project-icon-container p-3 rounded-lg mr-4"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7 text-sky-400"><path fill-rule="evenodd" d="M12.788 3.699a.75.75 0 0 0-1.576 0L7.188 11.052a18.751 18.751 0 0 0-2.18 5.884C4.88 17.784 5.364 18.5 6.155 18.5H17.846c.79 0 1.274-.716 1.146-1.564a18.752 18.752 0 0 0-2.18-5.884L12.788 3.699Zm-1.47 12.331a.75.75 0 0 1 .805-.662l.105.007c.44.024.833.213 1.102.518l2.25 2.5a.75.75 0 1 1-1.114 1.004l-1.408-1.567-1.408 1.567a.75.75 0 1 1-1.114-1.004l2.25-2.5a.75.75 0 0 1 .307-.34Z" clip-rule="evenodd" /><path d="m6.155 19.999 8.621-.001c.79 0 1.274-.716 1.146-1.564a18.752 18.752 0 0 0-2.18-5.884L9.718 3.699a.75.75 0 0 0-1.576 0L4.118 11.052a18.751 18.751 0 0 0-2.18 5.884C1.81 17.784 2.294 18.5 3.085 18.5h.01L4.14 19.999h2.014Z" /></svg></div><a href="https://github.com/Dharansh-Neema/image-tampering-detection" target="_blank" rel="noopener noreferrer" class="text-xl sm:text-2xl font-semibold bg-gradient-to-r from-sky-400 via-cyan-300 to-indigo-400 bg-clip-text text-transparent hover:opacity-80 transition-opacity">Image Tampering Detection</a></div><p class="text-neutral-400 text-sm sm:text-base leading-relaxed flex-grow mb-5">A CNN model to detect if images (e.g., bank receipts) have been tampered with by humans or AI. Includes a full training pipeline and FastAPI endpoint for real-time detection.</p><a href="https://github.com/Dharansh-Neema/image-tampering-detection" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-sky-400 hover:text-sky-300 transition-colors text-sm font-medium group">View on GitHub<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 ml-1 transform group-hover:translate-x-0.5 transition-transform"><path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" /></svg></a></div>
+                <div class="project-card rounded-xl p-6 sm:p-8 flex flex-col reveal-on-scroll delay-300"><div class="flex-shrink-0 mb-5 flex items-center"><div class="project-icon-container p-3 rounded-lg mr-4"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7 text-sky-400"><path d="M11.7 2.004a1.5 1.5 0 0 1 1.602.013l7.5 5.25a1.5 1.5 0 0 1 .628 1.932l-2.074 6.22a1.5 1.5 0 0 1-1.398 1.081H6.042a1.5 1.5 0 0 1-1.398-1.081L2.57 9.199a1.5 1.5 0 0 1 .627-1.932l7.5-5.25ZM6.612 9.75l1.875 5.625H15.51l1.875-5.625H6.612Z" /><path d="M5.25 18.002V21a.75.75 0 0 0 .75.75H18a.75.75 0 0 0 .75-.75v-2.998H5.25Z" /></svg></div><a href="https://github.com/Dharansh-Neema/Student-Rank-Predictor" target="_blank" rel="noopener noreferrer" class="text-xl sm:text-2xl font-semibold bg-gradient-to-r from-sky-400 via-cyan-300 to-indigo-400 bg-clip-text text-transparent hover:opacity-80 transition-opacity">Student Rank Predictor</a></div><p class="text-neutral-400 text-sm sm:text-base leading-relaxed flex-grow mb-5">An ML application to predict student ranks based on performance metrics. Encompasses data ingestion, preprocessing, model training, and deployment via a Flask API.</p><a href="https://github.com/Dharansh-Neema/Student-Rank-Predictor" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-sky-400 hover:text-sky-300 transition-colors text-sm font-medium group">View on GitHub<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 ml-1 transform group-hover:translate-x-0.5 transition-transform"><path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" /></svg></a></div>
+                <div class="project-card rounded-xl p-6 sm:p-8 flex flex-col reveal-on-scroll delay-400"><div class="flex-shrink-0 mb-5 flex items-center"><div class="project-icon-container p-3 rounded-lg mr-4"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7 text-sky-400"><path fill-rule="evenodd" d="M3.75 12a.75.75 0 0 1 .75-.75h.75a.75.75 0 0 1 .75.75v.75c0 .414.336.75.75.75h10.5a.75.75 0 0 0 .75-.75V12a.75.75 0 0 1 .75-.75h.75a.75.75 0 0 1 .75.75v3.75a3 3 0 0 1-3 3H6.75a3 3 0 0 1-3-3V12ZM12.75 3.75a.75.75 0 0 0-1.5 0V4.5h.75c.414 0 .75.336.75.75V10.5a.75.75 0 0 0 .75.75h3a.75.75 0 0 0 .75-.75V5.25a.75.75 0 0 0-.75-.75h-.75V3.75Z" clip-rule="evenodd" /><path d="M8.25 4.5V3.75a.75.75 0 0 1 1.5 0V4.5h.75A2.25 2.25 0 0 1 12.75 6v3.75h-1.5V6A.75.75 0 0 0 10.5 5.25H8.25Z" /></svg></div><a href="https://github.com/Dharansh-Neema/Vehicle-Insurance-ML" target="_blank" rel="noopener noreferrer" class="text-xl sm:text-2xl font-semibold bg-gradient-to-r from-sky-400 via-cyan-300 to-indigo-400 bg-clip-text text-transparent hover:opacity-80 transition-opacity">Vehicle Insurance ML</a></div><p class="text-neutral-400 text-sm sm:text-base leading-relaxed flex-grow mb-5">A complete end-to-end ML project combining Data Scientist principles with MLOps practices for vehicle insurance claim prediction or risk assessment.</p><a href="https://github.com/Dharansh-Neema/Vehicle-Insurance-ML" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-sky-400 hover:text-sky-300 transition-colors text-sm font-medium group">View on GitHub<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 ml-1 transform group-hover:translate-x-0.5 transition-transform"><path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" /></svg></a></div>
+                <div class="project-card rounded-xl p-6 sm:p-8 flex flex-col reveal-on-scroll delay-500"><div class="flex-shrink-0 mb-5 flex items-center"><div class="project-icon-container p-3 rounded-lg mr-4"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7 text-sky-400"><path fill-rule="evenodd" d="M14.615 1.595a.75.75 0 0 1 .359.852L12.982 9.75h7.268a.75.75 0 0 1 .548 1.262l-10.5 11.25a.75.75 0 0 1-1.272-.71l1.992-7.302H3.75a.75.75 0 0 1-.548-1.262l10.5-11.25a.75.75 0 0 1 .913-.143Z" clip-rule="evenodd" /></svg></div><a href="https://github.com/Dharansh-Neema/Flight-booking" target="_blank" rel="noopener noreferrer" class="text-xl sm:text-2xl font-semibold bg-gradient-to-r from-sky-400 via-cyan-300 to-indigo-400 bg-clip-text text-transparent hover:opacity-80 transition-opacity">Flight Booking API</a></div><p class="text-neutral-400 text-sm sm:text-base leading-relaxed flex-grow mb-5">A robust backend API for a flight booking system, likely featuring functionalities for flight search, booking management, and user authentication.</p><a href="https://github.com/Dharansh-Neema/Flight-booking" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-sky-400 hover:text-sky-300 transition-colors text-sm font-medium group">View on GitHub<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 ml-1 transform group-hover:translate-x-0.5 transition-transform"><path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" /></svg></a></div>
+                <div class="project-card rounded-xl p-6 sm:p-8 flex flex-col reveal-on-scroll delay-600 md:col-span-1 lg:col-span-1"><div class="flex-shrink-0 mb-5 flex items-center"><div class="project-icon-container p-3 rounded-lg mr-4"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7 text-sky-400"><path d="M2.25 2.25a.75.75 0 0 0 0 1.5h1.386c.17 0 .318.114.362.278l2.558 9.592a3.752 3.752 0 0 0-2.806 3.63c0 .414.336.75.75.75h15.75a.75.75 0 0 0 0-1.5H5.378A2.25 2.25 0 0 1 7.5 15h11.218a.75.75 0 0 0 .674-.421 60.358 60.358 0 0 0 2.96-7.228.75.75 0 0 0-.525-.965A60.864 60.864 0 0 0 5.68 4.509l-.232-.867A1.875 1.875 0 0 0 3.636 2.25H2.25ZM3.75 20.25a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM16.5 20.25a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z" /></svg></div><a href="https://github.com/Dharansh-Neema/E-Commerce" target="_blank" rel="noopener noreferrer" class="text-xl sm:text-2xl font-semibold bg-gradient-to-r from-sky-400 via-cyan-300 to-indigo-400 bg-clip-text text-transparent hover:opacity-80 transition-opacity">E-Commerce API</a></div><p class="text-neutral-400 text-sm sm:text-base leading-relaxed flex-grow mb-5">Comprehensive backend API for an e-commerce platform, likely handling products, orders, users, and payments.</p><a href="https://github.com/Dharansh-Neema/E-Commerce" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-sky-400 hover:text-sky-300 transition-colors text-sm font-medium group">View on GitHub<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 ml-1 transform group-hover:translate-x-0.5 transition-transform"><path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" /></svg></a></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="expertise" class="py-20 sm:py-28">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-center text-neutral-100 mb-16 sm:mb-20 reveal-on-scroll">
+                <span class="bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 bg-clip-text text-transparent">My Skills</span>
+            </h2>
+
+            <div class="skill-category-row rounded-xl p-6 sm:p-8 mb-10 sm:mb-12 reveal-on-scroll">
+                <h3 class="text-2xl sm:text-3xl font-semibold text-violet-300 mb-8 text-center">Languages & Frameworks</h3>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6 sm:gap-8">
+                    <div class="skill-item rounded-lg p-4"><i class="fab fa-python"></i><span class="text-neutral-300 text-sm font-medium mt-1">Python</span></div>
+                    <div class="skill-item rounded-lg p-4"><i class="fab fa-java"></i><span class="text-neutral-300 text-sm font-medium mt-1">Java</span></div>
+                    <div class="skill-item rounded-lg p-4"><i class="fas fa-code"></i><span class="text-neutral-300 text-sm font-medium mt-1">C/C++</span></div>
+                    <div class="skill-item rounded-lg p-4"><i class="fab fa-js-square"></i><span class="text-neutral-300 text-sm font-medium mt-1">JavaScript</span></div>
+                    <div class="skill-item rounded-lg p-4"><i class="fab fa-node-js"></i><span class="text-neutral-300 text-sm font-medium mt-1">Node.js</span></div>
+                    <div class="skill-item rounded-lg p-4"><i class="fas fa-server"></i><span class="text-neutral-300 text-sm font-medium mt-1">Express.js</span></div>
+                    <div class="skill-item rounded-lg p-4"><i class="fab fa-html5"></i><span class="text-neutral-300 text-sm font-medium mt-1">HTML</span></div>
+                    <div class="skill-item rounded-lg p-4"><i class="fas fa-link"></i><span class="text-neutral-300 text-sm font-medium mt-1">LangChain</span></div>
+                    <div class="skill-item rounded-lg p-4"><i class="fas fa-project-diagram"></i><span class="text-neutral-300 text-sm font-medium mt-1">LangGraph</span></div>
+                </div>
+            </div>
+
+            <div class="skill-category-row rounded-xl p-6 sm:p-8 mb-10 sm:mb-12 reveal-on-scroll delay-200">
+                <h3 class="text-2xl sm:text-3xl font-semibold text-teal-300 mb-8 text-center">Development Tools</h3>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6 sm:gap-8">
+                    <div class="skill-item rounded-lg p-4"><i class="fab fa-git-alt"></i><span class="text-neutral-300 text-sm font-medium mt-1">Git</span></div>
+                    <div class="skill-item rounded-lg p-4"><i class="fab fa-github"></i><span class="text-neutral-300 text-sm font-medium mt-1">GitHub</span></div>
+                    <div class="skill-item rounded-lg p-4"><i class="fas fa-play-circle"></i><span class="text-neutral-300 text-sm font-medium mt-1">GitHub Actions</span></div>
+                    <div class="skill-item rounded-lg p-4"><i class="fas fa-leaf"></i><span class="text-neutral-300 text-sm font-medium mt-1">Spring Boot</span></div>
+                    <div class="skill-item rounded-lg p-4"><i class="fas fa-brain"></i><span class="text-neutral-300 text-sm font-medium mt-1">Scikit-learn</span></div>
+                    <div class="skill-item rounded-lg p-4"><i class="fab fa-docker"></i><span class="text-neutral-300 text-sm font-medium mt-1">Docker</span></div>
+                    <div class="skill-item rounded-lg p-4"><i class="fas fa-dharmachakra"></i><span class="text-neutral-300 text-sm font-medium mt-1">Kubernetes</span></div>
+                    <div class="skill-item rounded-lg p-4"><i class="fab fa-jenkins"></i><span class="text-neutral-300 text-sm font-medium mt-1">Jenkins</span></div>
+                    <div class="skill-item rounded-lg p-4"><i class="fas fa-cogs"></i><span class="text-neutral-300 text-sm font-medium mt-1">Ansible</span></div>
+                </div>
+            </div>
+
+            <div class="skill-category-row rounded-xl p-6 sm:p-8 reveal-on-scroll delay-400">
+                <h3 class="text-2xl sm:text-3xl font-semibold text-cyan-300 mb-8 text-center">Cloud & Databases</h3>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6 sm:gap-8">
+                   <div class="skill-item rounded-lg p-4"><i class="fab fa-aws"></i><span class="text-neutral-300 text-sm font-medium mt-1">AWS</span></div>
+                   <div class="skill-item rounded-lg p-4"><i class="fab fa-google"></i><span class="text-neutral-300 text-sm font-medium mt-1">GCP</span></div>
+                   <div class="skill-item rounded-lg p-4"><i class="fas fa-database text-green-500"></i><span class="text-neutral-300 text-sm font-medium mt-1">MongoDB</span></div>
+                   <div class="skill-item rounded-lg p-4"><i class="fas fa-database text-blue-600"></i><span class="text-neutral-300 text-sm font-medium mt-1">PostgreSQL</span></div>
+                   <div class="skill-item rounded-lg p-4"><i class="fas fa-database text-sky-700"></i><span class="text-neutral-300 text-sm font-medium mt-1">MySQL</span></div>
+                   <div class="skill-item rounded-lg p-4"><i class="fas fa-vector-square"></i><span class="text-neutral-300 text-sm font-medium mt-1">PineCone</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-20 sm:py-28">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-center text-neutral-100 mb-16 sm:mb-20 reveal-on-scroll">
+                <span class="bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 bg-clip-text text-transparent">Get In Touch</span>
+            </h2>
+
+            <div class="contact-card max-w-4xl mx-auto rounded-xl shadow-2xl p-6 sm:p-10 md:p-12 reveal-on-scroll">
+                <div class="grid md:grid-cols-2 gap-8 md:gap-12 items-center contact-grid">
+                    <div class="text-center md:text-left contact-avatar-container">
+                        <img src="./images/contact_avatar.png" alt="Contact Avatar - Dharansh Neema" 
+                             class="w-40 h-40 sm:w-48 sm:h-48 mx-auto md:mx-0 rounded-xl object-cover mb-6 shadow-xl ring-2 ring-indigo-500/50 ring-offset-4 ring-offset-contact-card-bg animate-fadeInUpSlight"
+                             onerror="this.onerror=null; this.src='https://placehold.co/192x192/1E1B3A/A78BFA?text=DN';">
+                        
+                        <h3 class="text-2xl font-semibold text-neutral-100 mb-2 animate-fadeInUpSlight delay-100">Dharansh Neema</h3>
+                        <p class="text-indigo-300 mb-6 animate-fadeInUpSlight delay-200">Full Stack AI Engineer</p>
+                        
+                        <div class="space-y-3 mb-6 animate-fadeInUpSlight delay-300">
+                            <a href="mailto:dharanshneema@gmail.com" class="flex items-center justify-center md:justify-start text-neutral-300 hover:text-indigo-400 transition-colors group">
+                                <svg class="w-5 h-5 mr-3 text-indigo-400 group-hover:text-indigo-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z"/><path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z"/></svg>
+                                dharanshneema@gmail.com
+                            </a>
+                        </div>
+
+                        <div class="flex justify-center md:justify-start space-x-4 animate-fadeInUpSlight delay-400">
+                            <a href="https://www.instagram.com/dharanshneema/" target="_blank" rel="noopener noreferrer" class="text-neutral-400 hover:text-pink-500 transition-colors"><svg class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072s3.667-.014 4.947-.072c4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.947s-.014-3.667-.072-4.947c-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+                            <a href="https://www.facebook.com/dharang.neema" target="_blank" rel="noopener noreferrer" class="text-neutral-400 hover:text-blue-600 transition-colors"><svg class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878V14.89H8.078V12h2.359v-1.996c0-2.343 1.393-3.599 3.526-3.599 1.001 0 1.865.074 2.115.107v2.513h-1.489c-1.141 0-1.362.542-1.362 1.336V12h2.797l-.363 2.89H13.25V21.878C18.343 21.128 22 16.991 22 12z"/></svg></a>
+                            <a href="https://x.com/DHA_NEEMA" target="_blank" rel="noopener noreferrer" class="text-neutral-400 hover:text-neutral-100 transition-colors"><svg class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+                        </div>
+                    </div>
+
+                    <div class="animate-fadeInUpSlight delay-500">
+                        <form action="mailto:dharanshneema@gmail.com" method="post" enctype="text/plain">
+                            <div class="mb-5">
+                                <label for="name" class="block mb-2 text-sm font-medium text-indigo-300">Full Name</label>
+                                <input type="text" id="name" name="name" class="form-input block w-full p-3 text-neutral-200 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 text-sm" placeholder="Your Name" required>
+                            </div>
+                            <div class="mb-5">
+                                <label for="email" class="block mb-2 text-sm font-medium text-indigo-300">Email Address</label>
+                                <input type="email" id="email" name="email" class="form-input block w-full p-3 text-neutral-200 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 text-sm" placeholder="your.email@example.com" required>
+                            </div>
+                            <div class="mb-6">
+                                <label for="message" class="block mb-2 text-sm font-medium text-indigo-300">Message</label>
+                                <textarea id="message" name="message" rows="5" class="form-textarea block w-full p-3 text-neutral-200 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 text-sm" placeholder="Your message..." required></textarea>
+                            </div>
+                            <button type="submit" class="w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-indigo-600 hover:via-purple-600 hover:to-pink-600 text-white font-semibold py-3 px-6 rounded-lg focus:outline-none focus:ring-4 focus:ring-purple-500/50 focus:ring-offset-2 focus:ring-offset-contact-card-bg transition-all duration-300 ease-in-out text-base shadow-lg hover:shadow-xl transform hover:scale-105">
+                                Send Message
+                            </button>
+                            <p class="text-xs text-neutral-500 mt-3 text-center">This form will open your default email client.</p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-brand-near-black text-center py-10">
+        <p class="text-neutral-500 text-sm">&copy; <span id="currentYear"></span> Dharansh Neema. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const menuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIconOpen = menuButton.querySelector('svg.block');
+        const menuIconClose = menuButton.querySelector('svg.hidden');
+
+        menuButton.addEventListener('click', () => {
+            const isExpanded = menuButton.getAttribute('aria-expanded') === 'true' || false;
+            menuButton.setAttribute('aria-expanded', !isExpanded);
+            mobileMenu.classList.toggle('hidden');
+            menuIconOpen.classList.toggle('hidden');
+            menuIconClose.classList.toggle('hidden');
+        });
+
+        document.querySelectorAll('#mobile-menu a, nav a[href^="#"]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                if (link.closest('#mobile-menu')) {
+                    if (mobileMenu.classList.contains('hidden')) return;
+                    menuButton.setAttribute('aria-expanded', 'false');
+                    mobileMenu.classList.add('hidden');
+                    menuIconOpen.classList.remove('hidden');
+                    menuIconClose.classList.add('hidden');
+                }
+                if (link.hash !== "") {
+                    const hash = link.hash;
+                    const targetElement = document.querySelector(hash);
+                    if (targetElement) {
+                        const headerOffset = document.querySelector('nav').offsetHeight || 80;
+                        const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+                        const offsetPosition = elementPosition - headerOffset;
+                        if ('scrollBehavior' in document.documentElement.style) {
+                            window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                        } else {
+                            window.scrollTo(0, offsetPosition);
+                        }
+                    }
+                }
+            });
+        });
+        
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        const revealElements = document.querySelectorAll('.reveal-on-scroll');
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                    if (entry.target.classList.contains('timeline-container')) {
+                        entry.target.classList.add('line-animated');
+                    }
+                }
+            });
+        }, { threshold: 0.05 }); 
+
+        revealElements.forEach(el => {
+            revealObserver.observe(el);
+        });
+
+        // Interactive Avatar Script
+        const aboutSection = document.getElementById('about');
+        const avatar = document.getElementById('interactive-avatar');
+        const MAX_ROTATION = 10; // Max rotation in degrees
+
+        if (aboutSection && avatar) {
+            aboutSection.addEventListener('mousemove', (e) => {
+                const rect = aboutSection.getBoundingClientRect();
+                // Calculate mouse position relative to the center of the section
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+
+                // Calculate rotation values (normalize and scale)
+                // The further the mouse from the center, the more it rotates, up to MAX_ROTATION
+                const rotateY = (x / (rect.width / 2)) * MAX_ROTATION;
+                const rotateX = -(y / (rect.height / 2)) * MAX_ROTATION; // Negative for natural feel
+
+                avatar.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`; // Keep existing scale
+            });
+
+            aboutSection.addEventListener('mouseleave', () => {
+                avatar.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)'; // Reset to original scale
+            });
+        }
+
+    </script>
+</body>
+</html>
