@@ -335,8 +335,25 @@
         </div>
     </nav>
 
-    <section id="about" class="min-h-screen flex items-center justify-center py-24 pt-32 sm:pt-28 bg-gradient-to-b from-brand-black via-neutral-900/30 to-brand-black overflow-hidden">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <section id="about" class="min-h-screen flex items-center justify-center py-24 pt-32 sm:pt-28 overflow-hidden relative">
+        <!-- Video Background -->
+        <div class="absolute inset-0 w-full h-full overflow-hidden z-0">
+            <video 
+                autoplay 
+                muted 
+                loop 
+                playsinline
+                class="absolute object-cover w-full h-full"
+                style="filter: brightness(0.4); transform: scale(1.1);"
+                id="background-video"
+            >
+                <source src="./videos/Slow_Random_Dot_Video_Ready.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <!-- Overlay gradient for better text readability -->
+        <div class="absolute inset-0 bg-gradient-to-b from-brand-black via-neutral-900/70 to-brand-black z-10"></div>
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-20">
             <div class="mb-10 sm:mb-12 animate-fadeInUpSlight" style="perspective: 1000px;">
                 <img 
                   id="interactive-avatar" 
@@ -588,6 +605,23 @@
             });
         }
 
+    </script>
+
+    <!-- Script to control video playback rate -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const video = document.getElementById('background-video');
+            if (video) {
+                // Set playback rate to 0.5 for slow motion effect
+                video.playbackRate = 0.5;
+                
+                // Ensure video plays when loaded (some browsers might need this)
+                video.addEventListener('loadedmetadata', function() {
+                    video.play();
+                    video.playbackRate = 0.5; // Set again in case it resets
+                });
+            }
+        });
     </script>
 </body>
 </html>
